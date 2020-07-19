@@ -17,7 +17,7 @@ def get_project(apikey):
         #'size': '20',
         'sort': 'scan.name,ASC'        
     }
-    resp = requests.get('https://us.api.insight.rapid7.com/ias/v1/apps', params=payload, headers=headers)
+    resp = requests.get('{URL}/ias/v1/apps', params=payload, headers=headers)
 
     if resp.status_code == 200:
         logging.info(f"Successfully retrieved apps")
@@ -40,7 +40,7 @@ def get_scans(apikey, appid):
         'type':'SCAN',
         'query':f"scan.app.id = '{appid}'"
     }
-    resp = requests.post('https://us.api.insight.rapid7.com/ias/v1/search', params=payload, headers=headers, json=body)
+    resp = requests.post('{URL}/ias/v1/search', params=payload, headers=headers, json=body)
     
     if resp.status_code == 200:
         return resp.json()
@@ -62,7 +62,7 @@ def get_searchitems(apikey, severity, appid):
         'type':'VULNERABILITY',
         'query':f"vulnerability.severity = '{severity}' && vulnerability.app.id = '{appid}'"
     }
-    resp = requests.post('https://us.api.insight.rapid7.com/ias/v1/search', params=payload, headers=headers, json=body)
+    resp = requests.post('{URL}/ias/v1/search', params=payload, headers=headers, json=body)
 
     if resp.status_code == 200:
         #logging.info(f"Successfully retrieved scans")

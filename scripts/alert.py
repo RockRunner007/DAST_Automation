@@ -36,7 +36,7 @@ def get_project(apikey):
         #'size': '20',
         'sort': 'scan.name,ASC'        
     }
-    return process_api_request('https://us.api.insight.rapid7.com/ias/v1/apps', 'GET', _set_headers(apikey), params=params)
+    return process_api_request('{URL}/ias/v1/apps', 'GET', _set_headers(apikey), params=params)
 
 def get_scans(apikey, appid):
     params = {
@@ -48,7 +48,7 @@ def get_scans(apikey, appid):
         'type':'SCAN',
         'query':f"scan.app.id = '{appid}'"
     }
-    resp = requests.post('https://us.api.insight.rapid7.com/ias/v1/search', params=params, headers=_set_headers(apikey), json=json)
+    resp = requests.post('{URL}/ias/v1/search', params=params, headers=_set_headers(apikey), json=json)
     
     if resp.status_code == 200:
         return resp.json()
