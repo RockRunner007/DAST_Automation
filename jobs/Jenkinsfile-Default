@@ -1,0 +1,22 @@
+pipeline {
+    agent { label "orca_build-small" }
+    stages {
+        stage("Submit DAST") {
+            steps {
+                cleanWs()
+                
+                insightAppSec appId: '92977221-b703-4622-a9f4-48ed87f81ada', buildAdvanceIndicator: 'SCAN_SUBMITTED', enableScanResults: false, insightCredentialsId: 'jenkins-rapid7-api', maxScanExecutionDuration: '0d 5h 0m', maxScanPendingDuration: '0d 0h 30m', region: 'US', scanConfigId: '96471962-9241-4ee5-8e3c-0c1099e29b51', vulnerabilityQuery: 'vulnerability.severity=\'HIGH\''
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                emailext body: 'Scan has been submitted', subject: 'Scan has been submitted', to: 'steven.carlson@q2.com'
+            }
+        }
+        failure {
+            mail to: 'steven.carlson@q2ebanking.com', subject: "Build Failure: ${JOB_BASE_NAME}", body: "Failed to submit rapid 7 scan.  ${BUILD_URL}"
+        }
+    }
+}
